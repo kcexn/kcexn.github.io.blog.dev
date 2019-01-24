@@ -21,40 +21,19 @@ title: Blog
             </p>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <div class="card bg-primary">
-              <div class="card-header">
-                <div class="card-title"><h4>Blog Title</h4></div>
-              </div>
-              <div class="card-body">
-                <div class="card-text">
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illo, asperiores corporis? Deleniti blanditiis libero, id
-                    nesciunt quod quas tenetur laborum?
-                  </p>
-                </div>
-              </div>
-              <div class="card-footer text-right">
-                <button class="btn btn-secondary">Read More...</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="row mt-3" id="spacer-2"></div>
+        {% for post in site.posts %}
         <div class="row mt-3">
           <div class="col">
             <div class="card bg-primary">
               <div class="card-header">
-                <div class="card-title"><h4>Blog Title</h4></div>
+                <div class="card-title">
+                  <h2>{{ post.title }}</h2>
+                </div>
               </div>
               <div class="card-body">
                 <div class="card-text">
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Illo, asperiores corporis? Deleniti blanditiis libero, id
-                    nesciunt quod quas tenetur laborum?
-                  </p>
+                  <p>{{ post.lead }}</p>
                 </div>
               </div>
               <div class="card-footer text-right">
@@ -63,6 +42,7 @@ title: Blog
             </div>
           </div>
         </div>
+        {% endfor %}
         <div class="row mt-3" id="spacer"></div>
       </div>
     </div>
