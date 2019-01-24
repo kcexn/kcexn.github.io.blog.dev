@@ -21,6 +21,11 @@
   background: #1a1a1a;
 }
 
+.vertical-right-line {
+  border-right: 1px solid #ffffff4f;
+  height: auto;
+}
+
 // Bootstrap md screen width is 992px
 @media (max-width: 992px) {
   #main-header {
