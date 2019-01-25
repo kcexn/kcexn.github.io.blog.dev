@@ -26,6 +26,31 @@
   height: auto;
 }
 
+#post-body {
+  a {
+    text-decoration: underline;
+    color: #f8f9fa;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  blockquote {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+}
+
 // Bootstrap md screen width is 992px
 @media (max-width: 992px) {
   #main-header {
