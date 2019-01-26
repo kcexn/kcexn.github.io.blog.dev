@@ -7,110 +7,123 @@ date: 2019-01-25 12:44
 
 Over the course of the university year of 2018 I worked on my final
 year project. Other universities and other degrees will also call it 
-the capstone project, or perhaps, an honours project. I think this 
+the capstone project, or perhaps, an honours project. This 
 was definitely one of the most educational work I did while I was at 
 university. The project challenged me to develop research skills, 
 especially skills related to reading technical documents (journal papers, 
-white papers, reports, theses etc.). My supervisor and I decided to 
+white papers, reports, theses etc.). 
+
+My supervisor and I decided to 
 investigate how adaptive filtering 
 techniques can be used to correct slowly time varying distortions 
 introduced by the wireless communication channel in a time varying 
 environment. My full report can be read 
 [here](https://drive.google.com/open?id=1kEsqf81pFY29jzULkzd2qBHHLghtqtLW) 
-although it could be a bit of a slog at around 60 pages long. I'm hoping 
+although it could be a bit of a slog at around 60 pages long. 
+I'm hoping 
 that this short article can provide a kind of introduction to my project 
-without digging too much into any kind of details.
+without digging too much into any kind of details and provide a general 
+sense of what was learned.
 
 ### Time Varying Nature of Wireless Channel Distortion
 
-The wireless communication channel between mobile phones and base 
-stations, or your laptop computer and the wifi router. Is usually not 
-static, this is because the mobile phone and laptop can be picked up 
-and moved around, but also, because the environment between your laptop 
-and the router could change, maybe your cat has decided to get up from 
-the spot by the window sill to a more comfortable place in the house. The 
-wireless channel is also not typically a straight line like other 
-communication technologies such as twisted pair, or optical fibre, this 
-introduces lots of distortion due to the wireless signal reflecting off 
-and bending around objects between the sender and the receiver.
+The first requirement was really to understand what the wireless 
+communication channel is and how it works. There are two characteristics 
+of the link between our laptop and the wifi router or our smart phone 
+and the base station that are interesting. The first is that the link 
+is usually not "line of sight", e.g. as I write this, my laptop is not in 
+the 
+same room as the router, so somehow the signal has to bounce its way 
+around my apartment to get to me. This obviously impairs the wifi signal 
+and introduces distortion. The second interesting characteristic to me, is 
+that the signal is probably going to be a little time-varying, my laptop 
+is not really that steady on my knees and my girlfriend moving around the 
+apartment changes the way the wifi signal reaches me from moment to 
+moment. It's this kind of a wireless communication link that I chose to 
+study for my project, one that was impaired due to obstacles in the way 
+and varied quite slowly with time. My supervisor and I thought it would 
+be worth investigating how well an adpative receiver filter would perform 
+in such an environment without re-training the filter coefficients 
+periodically.
 
-There are number of ways to model this distortion and it's time-varying 
-nature. A traditional way of modelling the wireless channel distortion 
-called fading, is as a finite impulse response filter with time-varying 
-taps whose magnitudes vary following a Rayleigh distribution. This 
-Rayleigh fading model and it's variant the Rician fading channel was how I 
-chose to model this environment.
+There are a number of ways to model this kind of distortion. I chose to 
+use a [Rayleigh fading](https://en.wikipedia.org/wiki/Rayleigh_fading) 
+model, since it's fairly well understood and wasn't super hard for me 
+to implement a simulation in [MATLAB](https://www.mathworks.com/). 
+Essentially I chose to simulate my environment as a finite impulse 
+response filter where the filter coefficient magnitudes vary following a 
+Rayleigh distribution I also had a bit of a look at how Rician distribution 
+performed as well.
 
 #### Finite Impulse Response Filter
 
-The finite impulse response (FIR) filter. Can be thought of and visualised 
-as a tapped delay line as shown in the following picture.  
-<image title="finite impulse response filter" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/FIR_Filter.svg/500px-FIR_Filter.svg.png" alt="finite impulse response filter" class="img-fluid mb-3" style="background: #fff" />  
-Where `x[n]` is the output of the transmitter at discrete time `n` and 
-each delay can be thought of as a discrete time delay caused by the 
-extra time taken for the signal to arrive at the receiver caused by one 
-of the paths the signal takes. This is clearly a simple model for 
-understanding how reflections distort a transmitted wireless signal, in 
-reality, the signal arrives on a continuum of different paths, however, 
-as an ideal representation of the distortion phenomena this model is 
-useful for understanding how the receiver can be improved, importantly, 
-in practice this model quite closely approximates the true behaviour of a 
-wireless environment and can be used as a model for the digital signal 
-processing to undo the distortion. A Rayleigh or Rician
-distribution can be applied 
-to the magnitudes of each of the taps to give the channel under simulation 
-a sense of time variation.
+The finite impulse response (FIR) filter is something I think that anyone 
+who did a signal processing subject at university probably can vaguely 
+remember. I did signal processing two years prior to this project, and it 
+also wasn't one of my best subjects, so things were definitely a little 
+fuzzy to begin with. But it really isn't a terribly complicated idea, and 
+the filter can be visualised as a tapped delay line as shown below.
+<image title="finite impulse response filter" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/FIR_Filter.svg/500px-FIR_Filter.svg.png" alt="finite impulse response filter" class="img-fluid mb-3" style="background: #fff" />
+In the context of my problem where signals suffer from 
+[multipath propagation](https://en.wikipedia.org/wiki/Multipath_propagation) 
+, `x[n]` is the output of the transmitter at a discrete time `n` and each 
+delay (`z^(-1)`) represents the extra excess delay introduced by each 
+of the paths in multipath propagation model. A discrete and finite model 
+like this is clearly simplified from the reality, my wifi router obviously 
+doesn't transmit along a discrete set of paths to my laptop. However, it's 
+a useful way to model the distortion phenomena and can be used for 
+understanding how the receiver can be improved. Importantly, in practice, 
+this model quite closely approximates the true behaviour of a wireless 
+channel and can be used as a model for the digital signal processing to 
+undo the distortion.
 
 ### Signal Processing
 
-Since the channel filter can be modeled as a finite impulse response 
-filter it can be undone with an inverse FIR filter. A true inverse filter 
-would be the 
+Since I'm modelling the channel as a finite impulse response filter, the 
+received signal can be thought of as a some kind of signal containing 
+information being filtered and having some additional white noise added 
+to it. In this case, a simple solution would be to find the inverse filter 
+to undo the channel effects. A true inverse filter would be the 
 [zero forcing](https://en.wikipedia.org/wiki/Zero_forcing_equalizer) 
-filter. This filter was in fact in my simulations and experiment an 
-effective filter, however, because the zero forcing filter suffers from 
-a noise amplification phenomenon, and the received signal has added 
-random noise, this filter is only effective at low signal-to-noise (SNR) 
-ratios. The alternative approach I took was to try a minimum mean square 
-error (MMSE) filter, which doesn't truly invert the channel filter, but 
-instead minimises the mean square error between the desired output and 
-the output of the corrective filter undoing the channel effects as much 
-as possible without amplifying random noise.
+filter. In my simulations and experiments this filter turned out to be a 
+reasonable filter, however, because it suffers from the noise 
+amplification phenomenon, only effective at low signal-to-noise (SNR) 
+ratios. My second approach was to try a minimum mean square error (MMSE) 
+filter, which doesn't truly invert the channel filter, but instead 
+estimates a solution that minimises the mean of the square of the error 
+between the desired outputs and the output of the corrective filter 
+undoing the channel effects.
 
 #### Adaptive Filtering
 
-The adaptive part of adaptive filtering means that instead of calculating 
-an optimal MMSE filter prior to undoing the channel effects, we let the 
-filter figure out the best solution. This is a very rudimentary form of 
-machine learning, in fact, the 
-[least mean square filter](https://en.wikipedia.org/wiki/Least_mean_squares_filter), arguably the 
-simplest adaptive filter operates very similarly to the 
-[perceptron](https://en.wikipedia.org/wiki/Perceptron) of a neural net. The
-main advantage of using an adaptive filter in a slowly time-varying 
-scenario is that if the assumption is made that most incoming signals will 
-be classified correctly, an adaptive filter can track the minimum mean 
-square error solution over time as the wireless channel changes.
+I chose to look into the [least mean square filter](https://en.wikipedia.org/wiki/Least_mean_squares_filter) 
+as the filter of choice. The least mean square filter is one of the 
+simplest forms of adaptive filter, it's adaptive nature means that it 
+can learn the optimal corrective filter coefficients given enough 
+iterations. My main hope in investigating adaptive filter performance was 
+to see that the adaptive filter would be able to track the best filter 
+coefficients over time even as the channel changed.
 
-The least mean square filter and one of it's variants the normalised least 
-mean square filter are what I investigated in my project. Both estimate 
-the optimal filter coefficients to find the minimum mean square error 
-solution, but do it in slightly different ways with slightly different 
-results. I found that the least mean square filter performed slightly 
-better at tracking solutions particularly in lower SNR regions.  
-![MSE-LMS]({{ site.baseurl }}/img/posts/2019-01-25-Final-Year-Project/MeanSquareError-LMS.png "Low SNR Performance of LMS when tracking solution")  
-And that the normalised variant was much faster at finding a solution but 
-is not suitable for tracking time variation at lower SNR's.  
-![MSE-NLMS]({{ site.baseurl }}/img/posts/2019-01-25-Final-Year-Project/MeanSquareError-NLMS.png "Low SNR Performance of NLMS when tracking solution")  
+It was great to see then after setting up experiments in MATLAB with a 
+variety of different channel parameters that the least mean square (LMS) 
+filter and one of its variants the normalised least mean square (NLMS) 
+filter did just this. The picture below shows the LMS filters tracking 
+behaviour compared to the optimal solution at a low-ish SNR.
+![MSE-LMS]({{ site.baseurl }}/img/posts/2019-01-26-Final-Year-Project/MeanSquareError-LMS.png "Low SNR Performance of LMS when tracking solution") 
+There were a couple of notable differences between the LMS filter and the 
+NLMS filter that I thought were interesting. The most dramatic was the 
+fact that the NLMS filter simply wasn't capable of tracking the optimal 
+solution over time at low SNR's even though it's initialisation time was 
+much faster.
+![MSE-NLMS]({{ site.baseurl }}/img/posts/2019-01-26-Final-Year-Project/MeanSquareError-NLMS.png "Low SNR Performance of NLMS when tracking solution")  
+
 I include many more details about how my experiments were designed, as 
 well as what my overall results were in my [report](https://drive.google.com/open?id=1kEsqf81pFY29jzULkzd2qBHHLghtqtLW). 
 There were some other 
 interesting behaviours that I observed such as an odd stepping away from 
 the optimal solution even at high SNR's that the NLMS algorithm exhibited.  
-![MSE-step]({{ site.baseurl }}/img/posts/2019-01-25-Final-Year-Project/MeanSquareError-Step.png)
+![MSE-step]({{ site.baseurl }}/img/posts/2019-01-26-Final-Year-Project/MeanSquareError-Step.png)
 I produced all these simulation plots in [MATLAB](https://www.mathworks.com/products/matlab.html). 
 I also implemented a proof of concept on a national instruments software 
 defined radio.
-
-
-
 
