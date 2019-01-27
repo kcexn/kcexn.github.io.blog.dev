@@ -18,6 +18,7 @@ email: kcexton01@gmail.com
 description: "Technical blog that belongs as part of my portfolio"
 baseurl: "/blog" # the subpath of your site, e.g. /blog
 url: "https://kcexn.github.io/blog"
+copyright_date: 2019
 twitter_username: jekyllrb
 github_username: jekyll
 
