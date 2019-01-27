@@ -8,8 +8,7 @@ on my final year project at Monash University, with a focus
 on wireless communication."
 ---
 
-Over the course of the university year of 2018 I worked on my final
-year project. Other universities and other degrees will also call it
+Other universities and other degrees will also call it
 the capstone project, or perhaps, an honours project. This
 was definitely one of the most educational work I did while I was at
 university. The project challenged me to develop research skills,
