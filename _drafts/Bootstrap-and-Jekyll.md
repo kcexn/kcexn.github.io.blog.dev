@@ -30,9 +30,30 @@ about HTML and CSS.
 
 ## Bootstrap
 
-1. Reasoning for using bootstrap
-2. Experience of using bootstrap
-3. Gotchas I've encountered
+I think the ideal way to approach learning web development should have 
+been to learn HTML5, CSS and Javascript from scratch so that I developed 
+a strong sense of the fundamentals of the web tools. However, I felt like 
+hitting the ground running with building a webpage, my previous experience 
+with front end web development has been that web development is most fun 
+when just trying things, since adding nice looking elements to the page 
+is quick and easy, and there's a fun rush of instant gratification. Also 
+I felt a bit like I'd just spent 4 years in a degree doing study from 
+first principles and it's nice to just hack something together sometimes. 
+These feelings led me to the Bootstrap CSS framework. 
+
+The Bootstrap framework offers a lot of pre-existing elements that can 
+just be used, buttons, nav-bars, fonts etc. This really sped up my 
+experience of building this site, since I didn't need to spend as much 
+time figuring out how to actually style things and can focus just on 
+placing elements on the page. I really like the fact that Bootstrap 
+offered mobile compatibility out of the box.
+
+A major downside is that since Bootstrap is so easy to use, with many 
+pre-existing classes that can just be plugged in where you want them. I 
+had no need to learn CSS properly, and just blurrily hacked my way through 
+any additional CSS that I needed based on a combination of my intuition 
+(read: educated guesses about how CSS might work) and random stack 
+overflow posts.
 
 ## Jekyll
 
